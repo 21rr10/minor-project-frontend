@@ -1,7 +1,6 @@
 
 import React from "react";
-import Header from "./components
-/Header";  // Import Header component
+import Header from "./components/Header";  // Import Header component
 import "./App.css";
 import Account from "./pages/Account";
 
