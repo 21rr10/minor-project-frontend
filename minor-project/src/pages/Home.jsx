@@ -46,7 +46,7 @@ function Home(){
                         </button>
                     </div>
 
-                    <div>Tripti wala header</div>
+                    
                 </div>
                 
             </header>
