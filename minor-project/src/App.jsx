@@ -1,11 +1,10 @@
 
 import React from "react";
-import Header from "./components/header";  // Import Header component
+import Header from "./pages/Header";  // Import Header component
 import "./App.css";
 
 function App() {
   return (
-<<<<<<< Updated upstream
     <div className="App">
       <Header />  {/* Using Header component */}
       <main>
@@ -13,15 +12,6 @@ function App() {
         <p>Start planning your next adventure with us!</p>
       </main>
     </div>
-=======
-    <>
-      <Home></Home>
-       {/* <Signin></Signin> */}
-       {/* <Button></Button> */}
-       {/* <Signup></Signup> */}
-    </>
-    
->>>>>>> Stashed changes
   );
 }
 
