@@ -18,6 +18,7 @@ function Home() {
         }}>
             <h1>Welcome to The Trip Finder</h1>
             <p>Start planning your next adventure with us!</p>
+            <hr></hr><hr></hr><hr></hr>
             <FlightSearchComponent></FlightSearchComponent>
         </div>
         
