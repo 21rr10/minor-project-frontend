@@ -13,10 +13,7 @@ function App() {
       <Home></Home>
       
       
-      <main>
-        <h1>Welcome to The Trip Finder</h1>
-        <p>Start planning your next adventure with us!</p>
-      </main>
+      
     </div>
   );
 }
