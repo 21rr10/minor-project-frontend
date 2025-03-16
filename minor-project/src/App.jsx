@@ -1,19 +1,17 @@
 
-import  Signin  from './pages/Signin.jsx';
-import  Signup  from './pages/Signup.jsx';
-// import './App.css';
-import Button from './pages/Account.jsx';
-import Home from './pages/Home.jsx';
+import React from "react";
+import Header from "./pages/Header";  // Import Header component
+import "./App.css";
 
 function App() {
   return (
-    <>
-      <Home></Home>
-       {/* <Signin></Signin> */}
-       {/* <Button></Button> */}
-       <Signup></Signup>
-    </>
-    
+    <div className="App">
+      <Header />  {/* Using Header component */}
+      <main>
+        <h1>Welcome to The Trip Finder</h1>
+        <p>Start planning your next adventure with us!</p>
+      </main>
+    </div>
   );
 }
 
