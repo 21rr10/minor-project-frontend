@@ -1,21 +1,58 @@
 import React from "react";
-import "./Header.css";
 
 const Header = () => {
   return (
-    <header className="header">
-      
-      
-      <nav className="navbar">
-        <div className="logo">TravelEase</div>
-        <ul className="nav-links">
-          <li><a href="#">Destinations</a></li>
-          <li><a href="#">Experiences</a></li>
-          <li><a href="#">Inspirations</a></li>
-          <li><a href="#">Trip Finder</a></li>
-          <li><a href="#">Most Popular</a></li>
-          <li><a href="#">About Us</a></li>
-        </ul>
+    <header className="sticky top-0 bg-[#7dd3fc] shadow-lg z-50">
+      <nav className="max-w-7xl mx-auto px-4 md:px-8 py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <div className="text-2xl font-bold bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent">
+            TravelEase
+          </div>
+
+          {/* Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="relative group">
+              <input
+                type="text"
+                placeholder="Search destinations..."
+                className="w-64 px-4 py-2 rounded-full border border-white/30 bg-white/10 
+                         focus:outline-none focus:ring-2 focus:ring-white/50 text-white 
+                         placeholder:text-white/70 transition-all text-sm"
+              />
+              <button className="absolute right-3 top-2 text-white/80 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </button>
+            </div>
+
+            <ul className="flex items-center gap-6">
+              {['Destinations', 'Experiences', 'Inspirations', 'Trip Finder'].map((item) => (
+                <li key={item}>
+                  <a 
+                    href="#" 
+                    className="text-white/90 hover:text-white font-medium text-sm 
+                             transition-colors relative pb-1 hover:after:w-full after:content-[''] 
+                             after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] 
+                             after:bg-white after:transition-all after:duration-300"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Mobile menu button */}
+          <button className="md:hidden p-2 rounded-lg hover:bg-white/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+
+       
       </nav>
     </header>
   );
