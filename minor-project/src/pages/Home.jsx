@@ -1,5 +1,8 @@
+import FlightSearchComponent from "../components/flightSearch";
+
 function Home() {
     return (
+        <>
         <div style={{
             backgroundImage: "url('/home.jpg')",
             backgroundSize: "cover",
@@ -15,7 +18,10 @@ function Home() {
         }}>
             <h1>Welcome to The Trip Finder</h1>
             <p>Start planning your next adventure with us!</p>
+            <FlightSearchComponent></FlightSearchComponent>
         </div>
+        
+        </>
     );
 }
 

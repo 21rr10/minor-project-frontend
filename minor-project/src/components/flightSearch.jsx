@@ -2,7 +2,7 @@ import React from 'react';
 
 const FlightSearchComponent = () => {
   return (
-    <div className="bg-blue-500 p-4 w-full">
+    <div className="bg-blue-500 p-4 w-full bg-opacity-80">
       <div className="bg-white rounded-lg flex flex-wrap md:flex-nowrap">
         {/* FROM section */}
         <div className="flex-1 p-4 relative border-r border-gray-200">
