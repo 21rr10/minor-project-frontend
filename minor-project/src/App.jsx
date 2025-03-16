@@ -2,13 +2,13 @@
 import React from "react";
 import Header from "./components/Header";  // Import Header component
 import "./App.css";
-import Account from "./pages/Account";
+// import Account from "./pages/Account";
 
 function App() {
   return (
     <div className="App">
       <Header />  {/* Using Header component */}
-      <Account></Account>
+      {/* <Account></Account> */}
       
       
       
