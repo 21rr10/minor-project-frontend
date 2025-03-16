@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Signup.css';
 
-import googleIcon from './google-icon.svg';
+import googleIcon from '../assets/google-icon.svg';
 
 function Signup() {
   const [email, setEmail] = useState('');

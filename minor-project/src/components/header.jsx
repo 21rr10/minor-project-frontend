@@ -28,7 +28,7 @@ const Header = () => {
             </div>
 
             <ul className="flex items-center gap-6">
-              {['Destinations', 'Experiences', 'Inspirations', 'Trip Finder'].map((item) => (
+              {['Destinations', 'Experiences', 'Inspirations', 'Trip Finder','About Us'].map((item) => (
                 <li key={item}>
                   <a 
                     href="#" 
