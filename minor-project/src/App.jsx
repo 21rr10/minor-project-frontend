@@ -9,10 +9,10 @@ import TravelDetailsPage from "./pages/Travel_deets";
 function App() {
   return (
     <div className="App">
-      {/* <Header />  */}
+      <Header /> 
       
-      {/* <Home></Home> */}
-      <TravelDetailsPage></TravelDetailsPage>
+      <Home></Home>
+      {/* <TravelDetailsPage></TravelDetailsPage> */}
       
       
     </div>
