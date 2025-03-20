@@ -25,16 +25,16 @@ const ItineraryPage = () => {
           // Mock data that would come from your backend
           // The format matches what you described: "bhubaneswar\n beautiful temple1\n templ2\n"
           const mockResponse = `Bhubaneswar
-Lingaraj Temple
-Mukteshwar Temple
-Rajarani Temple
-Parasurameswara Temple
-ISKCON Temple
-Brahmeswara Temple
-Ananta Vasudeva Temple
-Bindu Sarovara
-Dhauli Shanti Stupa
-Odisha State Museum`;
+                                    Lingaraj Temple
+                                    Mukteshwar Temple
+                                    Rajarani Temple
+                                    Parasurameswara Temple
+                                    ISKCON Temple
+                                    Brahmeswara Temple
+                                    Ananta Vasudeva Temple
+                                    Bindu Sarovara
+                                    Dhauli Shanti Stupa
+                                    Odisha State Museum`;
           
           // Parse the data (split by newlines)
           const lines = mockResponse.split('\n');
@@ -50,7 +50,7 @@ Odisha State Museum`;
               description: `One of the most significant spiritual destinations in ${cityName}. A must-visit for anyone seeking spiritual enlightenment.`,
               rating: (4 + Math.random()).toFixed(1),
               visitDuration: Math.floor(Math.random() * 3) + 1, // 1-3 hours
-              image: `/api/placeholder/400/300`, // In a real app, this would be a real image URL
+              // image: `/api/placeholder/400/300`, // In a real app, this would be a real image URL
               highlights: [
                 'Ancient architecture',
                 'Peaceful surroundings',
@@ -105,17 +105,13 @@ Odisha State Museum`;
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative bg-indigo-900 text-white">
-        <div 
-          className="absolute inset-0 opacity-30 bg-cover bg-center"
-          style={{ backgroundImage: `url('/api/placeholder/1920/600')` }}
-        ></div>
+        
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Discover the Spiritual Side of {itineraryData.cityName}
+            Discover {itineraryData.cityName}
           </h1>
           <p className="text-xl max-w-3xl mx-auto opacity-90">
-            We've curated the perfect spiritual journey based on your preferences. Explore sacred temples, 
-            tranquil gardens, and experience the rich cultural heritage.
+            We've curated the perfect journey based on your preferences. Explore {itineraryData.cityName}. Go on Ahead!!!
           </p>
         </div>
       </div>
@@ -155,38 +151,15 @@ Odisha State Museum`;
                     {/* Attraction card */}
                     <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                       <div className="md:flex">
-                        <div className="md:flex-shrink-0 h-48 md:h-auto md:w-48 bg-gray-200">
-                          <img 
-                            src={attraction.image} 
-                            alt={attraction.name}
-                            className="h-full w-full object-cover"
-                          />
-                        </div>
                         <div className="p-6">
                           <div className="flex items-center">
                             <h3 className="text-xl font-bold text-gray-900">{attraction.name}</h3>
-                            <div className="ml-4 flex items-center text-amber-500">
-                              <Star className="h-4 w-4 fill-current" />
-                              <span className="ml-1 text-sm">{attraction.rating}/5</span>
-                            </div>
+                            
                           </div>
                           
                           <p className="mt-3 text-gray-600">{attraction.description}</p>
                           
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              <Clock className="h-3 w-3 mr-1" />
-                              {attraction.visitDuration} hour{attraction.visitDuration > 1 ? 's' : ''}
-                            </div>
-                            {attraction.highlights.map((highlight, i) => (
-                              <span 
-                                key={i} 
-                                className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-                              >
-                                {highlight}
-                              </span>
-                            ))}
-                          </div>
+                         
                         </div>
                       </div>
                     </div>

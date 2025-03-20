@@ -1,86 +1,212 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Sidebar from "../components/sidebar";
+import PersonalInfoTab from '../components/personalInfoTab';
+import SecurityTab from '../components/securityTab';
+import DependentsTab from '../components/dependentsTab';
+import BookingsTab from '../components/bookingsTab';
 
-const Account = () => {
-  // Sample user data
-  const user = {
-    name: 'Ritesh Ranjan',
-    birthday: '7/10/2003',
-    gender: 'MALE',
-    maritalStatus: 'Married',
-    address: null,
-    pincode: null,
-    state: 'Odisha'
+function Account() {
+  // State for active tab
+  const [activeTab, setActiveTab] = useState('profile');
+  
+  // State for editing sections
+  const [editingSection, setEditingSection] = useState(null);
+  
+  // State for showing calendar view in bookings tab
+  const [showCalendarView, setShowCalendarView] = useState(false);
+  
+  // Mock profile data
+  const [profileData, setProfileData] = useState({
+    firstName: 'Ritesh',
+    lastName: 'Ranjan',
+    email: 'ranjan.ritesh21102003@gmail.com',
+    phone: '+91 9508381490',
+    address: 'kp3 KIIT',
+    profilePicture: 'https://placehold.co/150',
+    notificationPreferences: {
+      email: true,
+      sms: false,
+      flightUpdates: true,
+      priceAlerts: true,
+      promotions: false
+    }
+  });
+  
+  // State for form data when editing
+  const [formData, setFormData] = useState({...profileData});
+  
+  // State for dependents
+  const [dependents, setDependents] = useState([
+    {
+      id: 1,
+      name: 'Michael Johnson',
+      relationship: 'Spouse',
+      dob: '1985-04-12'
+    },
+    {
+      id: 2,
+      name: 'Emma Johnson',
+      relationship: 'Child',
+      dob: '2015-09-23'
+    }
+  ]);
+  
+  // State for bookings
+  const [bookings, setBookings] = useState([
+    {
+      id: 'BK12345',
+      from: 'New York JFK',
+      to: 'London Heathrow',
+      departDate: '2025-04-15',
+      returnDate: '2025-04-22',
+      airline: 'British Airways',
+      status: 'Confirmed',
+      passengers: 2
+    },
+    {
+      id: 'BK12346',
+      from: 'New York JFK',
+      to: 'Paris CDG',
+      departDate: '2025-05-10',
+      returnDate: '2025-05-17',
+      airline: 'Air France',
+      status: 'Pending',
+      passengers: 3
+    },
+    {
+      id: 'BK12347',
+      from: 'New York LGA',
+      to: 'Chicago ORD',
+      departDate: '2025-03-05',
+      returnDate: '2025-03-07',
+      airline: 'American Airlines',
+      status: 'Completed',
+      passengers: 1
+    }
+  ]);
+  
+  // Function to start editing a section
+  const startEditing = (section) => {
+    setEditingSection(section);
+    setFormData({...profileData});
+  };
+  
+  // Function to cancel editing
+  const cancelEditing = () => {
+    setEditingSection(null);
+  };
+  
+  // Function to save changes
+  const saveChanges = (section) => {
+    if (section === 'personal') {
+      setProfileData({...profileData, ...formData});
+    }
+    setEditingSection(null);
+  };
+  
+  // Function to handle input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    if (type === 'checkbox') {
+      setProfileData({
+        ...profileData,
+        notificationPreferences: {
+          ...profileData.notificationPreferences,
+          [name]: checked
+        }
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+  };
+  
+  // Function to add a new dependent
+  const addDependent = () => {
+    const newDependent = {
+      id: Date.now(),
+      name: 'New Dependent',
+      relationship: 'Other',
+      dob: '2000-01-01'
+    };
+    
+    setDependents([...dependents, newDependent]);
+  };
+  
+  // Function to delete a dependent
+  const deleteDependent = (id) => {
+    setDependents(dependents.filter(dep => dep.id !== id));
+  };
+  
+  // Function to format dates
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Profile fields to display
-  const profileFields = [
-    { label: 'NAME', value: user.name },
-    { label: 'BIRTHDAY', value: user.birthday },
-    { label: 'GENDER', value: user.gender },
-    { label: 'MARITAL STATUS', value: user.maritalStatus },
-    { label: 'YOUR ADDRESS', value: user.address, addButton: true },
-    { label: 'PINCODE', value: user.pincode, addButton: true },
-    { label: 'STATE', value: user.state }
-  ];
-
   return (
-    <div className="flex bg-gray-100 min-h-screen">
-      {/* Left Sidebar */}
-      <div className="w-64 bg-white p-4 shadow">
-        {/* Profile Avatar */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 rounded-lg bg-gradient-to-r from-green-400 to-green-500 flex items-center justify-center text-white text-2xl font-bold relative">
-            RR
-            <button className="absolute bottom-1 right-1 bg-white rounded-full p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-          </svg>
-
-            </button>
-          </div>
-          <h2 className="mt-2 font-bold">{user.name}</h2>
-          <p className="text-gray-500 text-sm">PERSONAL PROFILE</p>
-        </div>
-
-        {/* Menu Items */}
-        <div className="space-y-1">
-          <div className="p-2 rounded bg-blue-100 text-blue-600">Profile</div>
-          <div className="p-2 rounded hover:bg-gray-100">Login Details</div>
-          <div className="p-2 rounded hover:bg-gray-100">Logout</div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-indigo-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold">My Profile</h1>
         </div>
       </div>
-
-      {/* Main Content */}
-      <div className="flex-1 p-6">
-        <div className="bg-white rounded shadow p-6">
-          {/* Header with edit button */}
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-2xl font-bold">Profile</h1>
-             </div>
-            <button className="px-3 py-1 border border-blue-500 rounded text-blue-500">
-              EDIT
-            </button>
-          </div>
-
-          {/* Profile Information */}
-          <div>
-            {profileFields.map((field, index) => (
-              <div key={index} className="border-b py-3 last:border-0">
-                <div className="flex">
-                  <div className="w-1/3">
-                    <p className="text-gray-500">{field.label}</p>
-                  </div>
-                  <div className="w-2/3">
-                    {field.value ? (
-                      <p className="font-medium">{field.value}</p>
-                    ) : field.addButton ? (
-                      <button className="text-blue-500">+ Add</button>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            ))}
+      
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Sidebar */}
+          <Sidebar 
+            profileData={profileData}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+          
+          {/* Main Content */}
+          <div className="md:w-3/4">
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+              
+              {/* Personal Information Tab */}
+              {activeTab === 'profile' && (
+                <PersonalInfoTab 
+                  profileData={profileData}
+                  editingSection={editingSection}
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  startEditing={startEditing}
+                  cancelEditing={cancelEditing}
+                  saveChanges={saveChanges}
+                />
+              )}
+              
+              {/* Security Tab */}
+              {activeTab === 'security' && <SecurityTab />}
+              
+              {/* Dependents Tab */}
+              {activeTab === 'dependents' && (
+                <DependentsTab 
+                  dependents={dependents}
+                  addDependent={addDependent}
+                  deleteDependent={deleteDependent}
+                  formatDate={formatDate}
+                />
+              )}
+              
+              {/* Bookings Tab */}
+              {activeTab === 'bookings' && (
+                <BookingsTab 
+                  bookings={bookings}
+                  showCalendarView={showCalendarView}
+                  setShowCalendarView={setShowCalendarView}
+                  formatDate={formatDate}
+                />
+              )}
+              
+            </div>
           </div>
         </div>
       </div>
@@ -89,26 +215,3 @@ const Account = () => {
 };
 
 export default Account;
-// import React, { useState } from 'react';
-// import Sidebar from "../components/sidebar"; 
-
-// function Account() {
-//   const [activeTab, setActiveTab] = useState("profile");
-
-//   // Sample profile data (replace with real data)
-//   const profileData = {
-//     profilePicture: "https://via.placeholder.com/150",
-//     firstName: "John",
-//     lastName: "Doe",
-//     email: "john.doe@example.com",
-//   };
-
-//   return (
-//     <div className="flex">
-//       <Sidebar profileData={profileData} activeTab={activeTab} setActiveTab={setActiveTab} />
-//       {/* Add content here based on activeTab */}
-//     </div>
-//   );
-// }
-
-// export default Account;

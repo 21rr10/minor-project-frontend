@@ -346,31 +346,10 @@ const TravelDetailsPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {hotelData.map((hotel) => (
                       <div key={hotel.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                        <div className="relative h-40 bg-gray-200">
-                          <img 
-                            src={hotel.image} 
-                            alt={hotel.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-md text-sm font-medium flex items-center">
-                            {hotel.rating} <Star className="h-3 w-3 ml-1 fill-current text-amber-500" />
-                          </div>
-                        </div>
                         <div className="p-4">
                           <h3 className="font-bold text-lg mb-1">{hotel.name}</h3>
                           <p className="text-gray-600 text-sm mb-2">{hotel.location}</p>
-                          
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {hotel.amenities.map((amenity, index) => (
-                              <span 
-                                key={index} 
-                                className="inline-block px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-                              >
-                                {amenity}
-                              </span>
-                            ))}
-                          </div>
-                          
+                           
                           <div className="flex justify-between items-center mt-4">
                             <div>
                               <div className="text-gray-900 font-bold">₹{hotel.price.toLocaleString()}</div>

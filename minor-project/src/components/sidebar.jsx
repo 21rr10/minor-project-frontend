@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Lock, Bell, Users, Calendar, LogOut, Upload } from 'lucide-react';
+import { User, Lock, Users, Calendar, LogOut, Upload } from 'lucide-react';
 
 function Sidebar({ profileData, activeTab, setActiveTab }) {
 
@@ -47,17 +47,7 @@ function Sidebar({ profileData, activeTab, setActiveTab }) {
                 Security
               </button>
             </li>
-            <li>
-              <button 
-                onClick={() => setActiveTab('notifications')}
-                className={`w-full text-left px-4 py-2 rounded-lg flex items-center ${
-                  activeTab === 'notifications' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Bell className="h-5 w-5 mr-3" />
-                Notifications
-              </button>
-            </li>
+            
             <li>
               <button 
                 onClick={() => setActiveTab('dependents')}
