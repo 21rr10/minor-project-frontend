@@ -2,7 +2,7 @@
 import React from "react";
 import Header from "./components/header";  // Import Header component
 import "./App.css";
-// import Account from "./pages/Account";
+import Account from "./pages/Account";
 import Home from "./pages/Home";
 import MoodSelectionPage from "./pages/selectMood";
 import ItineraryPage from "./pages/itinerary";
@@ -18,7 +18,7 @@ function App() {
       {/* <MoodSelectionPage></MoodSelectionPage> */}
       {/* <ItineraryPage></ItineraryPage> */}
       {/* <TravelDetailsPage></TravelDetailsPage> */}
-      
+      {/* <Account></Account> */}
       
     </div>
   );

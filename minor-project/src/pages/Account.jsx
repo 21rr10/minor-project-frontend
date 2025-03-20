@@ -89,3 +89,26 @@ const Account = () => {
 };
 
 export default Account;
+// import React, { useState } from 'react';
+// import Sidebar from "../components/sidebar"; 
+
+// function Account() {
+//   const [activeTab, setActiveTab] = useState("profile");
+
+//   // Sample profile data (replace with real data)
+//   const profileData = {
+//     profilePicture: "https://via.placeholder.com/150",
+//     firstName: "John",
+//     lastName: "Doe",
+//     email: "john.doe@example.com",
+//   };
+
+//   return (
+//     <div className="flex">
+//       <Sidebar profileData={profileData} activeTab={activeTab} setActiveTab={setActiveTab} />
+//       {/* Add content here based on activeTab */}
+//     </div>
+//   );
+// }
+
+// export default Account;
