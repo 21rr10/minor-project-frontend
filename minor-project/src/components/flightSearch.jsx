@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const FlightSearchComponent = () => {
   return (
@@ -57,11 +58,13 @@ const FlightSearchComponent = () => {
       </div>
 
       {/* "Take Me There" Button */}
+      <Link to="/signup">
       <div className="mt-6 flex justify-center">
         <button className="bg-transparent text-black border border-black py-3 px-10 rounded-lg text-lg font-semibold shadow-md hover:bg-gray-200 transition duration-200">
           TAKE ME THERE
         </button>
       </div>
+      </Link>
     </div>
   );
 };

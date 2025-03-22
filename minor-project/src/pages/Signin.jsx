@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Signin.css';
 
 import googleIcon from '../assets/google-icon.svg';
@@ -149,8 +150,8 @@ function Signin() {
         </form>
         
         <p className="signup-prompt">
-          Not registered yet? <a href="#">Create an account</a>
-        </p>
+        Not registered yet? <Link to="/signup">Create an account</Link>
+      </p>
       </div>
     </div>
   );

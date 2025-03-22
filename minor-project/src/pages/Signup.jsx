@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Signup.css';
 
 import googleIcon from '../assets/google-icon.svg';
@@ -157,7 +158,7 @@ function Signup() {
         </form>
         
         <p className="signin-prompt">
-          Already have an account? <a href="#">Login</a>
+        Already have an account? <Link to="/signin">Login</Link>
         </p>
       </div>
     </div>
