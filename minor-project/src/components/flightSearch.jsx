@@ -67,3 +67,4 @@ const FlightSearchComponent = () => {
 };
 
 export default FlightSearchComponent;
+
