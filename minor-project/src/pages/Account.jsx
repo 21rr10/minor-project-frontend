@@ -23,15 +23,7 @@ function Account() {
     email: 'ranjan.ritesh21102003@gmail.com',
     phone: '+91 9508381490',
     address: 'kp3 KIIT',
-    profilePicture: 'https://placehold.co/150',
-    notificationPreferences: {
-      email: true,
-      sms: false,
-      flightUpdates: true,
-      priceAlerts: true,
-      promotions: false
-    }
-  });
+    });
   
   // State for form data when editing
   const [formData, setFormData] = useState({...profileData});
@@ -107,15 +99,11 @@ function Account() {
   
   // Function to handle input changes
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     
     if (type === 'checkbox') {
       setProfileData({
-        ...profileData,
-        notificationPreferences: {
-          ...profileData.notificationPreferences,
-          [name]: checked
-        }
+        ...profileData        
       });
     } else {
       setFormData({
