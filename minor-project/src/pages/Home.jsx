@@ -29,10 +29,12 @@
 // export default Home;
 
 import FlightSearchComponent from "../components/flightSearch";
+import Header from "../components/header";
 
 function Home() {
     return (
-        <>
+        <div>
+            <Header/>
             {/* Background Video */}
             <video 
                 autoPlay 
@@ -70,7 +72,7 @@ function Home() {
                 <hr></hr><hr></hr><hr></hr>
                 <FlightSearchComponent />
             </div>
-        </>
+        </div>
     );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, Calendar, Star, ArrowRight } from 'lucide-react';
+import Header from '../components/header';
 
 const ItineraryPage = () => {
   // In a real app, you would get these from URL params or route state
@@ -74,12 +75,15 @@ const ItineraryPage = () => {
   
   if (loading) {
     return (
+      // use loader via Suspense Api
       <div className="min-h-screen bg-gray-50 flex justify-center items-center">
+       
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-xl text-gray-700">Creating your perfect itinerary...</p>
         </div>
       </div>
+    
     );
   }
   
@@ -103,6 +107,7 @@ const ItineraryPage = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header/>
       {/* Hero Section */}
       <div className="relative bg-indigo-900 text-white">
         

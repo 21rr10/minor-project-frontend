@@ -4,6 +4,7 @@ import PersonalInfoTab from '../components/personalInfoTab';
 import SecurityTab from '../components/securityTab';
 import DependentsTab from '../components/dependentsTab';
 import BookingsTab from '../components/bookingsTab';
+import Header from '../components/header';
 
 function Account() {
   // State for active tab
@@ -149,6 +150,7 @@ function Account() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+
       {/* Header */}
       <div className="bg-indigo-900 text-white">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">

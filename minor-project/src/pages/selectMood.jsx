@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/header';
 
 const MoodSelectionPage = () => {
   // For navigation (in a real app)
@@ -35,7 +36,11 @@ const MoodSelectionPage = () => {
   };
 
   return (
+    <div>
+            <Header/>
+   
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col justify-center items-center p-6">
+
       <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full p-8">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-indigo-800 mb-4">Let's Personalize Your Experience</h1>
@@ -82,6 +87,7 @@ const MoodSelectionPage = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

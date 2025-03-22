@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Cloud, CloudRain, CloudSnow, Sun, Thermometer, Umbrella, Wind, Plane, Clock, Building, Star, ExternalLink } from 'lucide-react';
+import Header from '../components/header';
 
 const TravelDetailsPage = () => {
   // In a real app, you would get these from URL params or route state
@@ -179,6 +180,7 @@ const TravelDetailsPage = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header/>
       {/* Header */}
       <div className="bg-indigo-900 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
