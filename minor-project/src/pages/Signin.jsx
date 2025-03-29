@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Signin.css';
 
-import googleIcon from '../assets/google-icon.svg';
+// import googleIcon from '../assets/google-icon.svg';
 
 function Signin() {
   const [email, setEmail] = useState('');

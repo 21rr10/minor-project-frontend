@@ -2,21 +2,33 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Signup.css';
 
-import googleIcon from '../assets/google-icon.svg';
-
 function Signup() {
   const [email, setEmail] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const [password, setPassword] = useState('');
-
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' });
+  const [errors, setErrors] = useState({
+    email: '',
+    firstname: '',
+    lastname: '',
+    password: '',
+    confirmPassword: '',
+  });
 
+  // Validation Functions
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) return 'Email is required';
     if (!re.test(email)) return 'Invalid email format';
+    return '';
+  };
+
+  const validateName = (name) => {
+    if (!name.trim()) return 'This field is required';
+    if (!/^[a-zA-Z\s]+$/.test(name)) return 'Only letters are allowed';
     return '';
   };
 
@@ -33,7 +45,8 @@ function Signup() {
     if (confirmPassword !== password) return 'Passwords do not match';
     return '';
   };
-  
+
+  // Dark Mode Toggle
   useEffect(() => {
     const savedMode = localStorage.getItem('darkMode');
     if (savedMode === 'true') {
@@ -46,7 +59,7 @@ function Signup() {
     const newMode = !darkMode;
     setDarkMode(newMode);
     localStorage.setItem('darkMode', newMode.toString());
-    
+
     if (newMode) {
       document.body.classList.add('dark-mode');
     } else {
@@ -54,25 +67,37 @@ function Signup() {
     }
   };
 
+  // Form Submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const emailError = validateEmail(email);
+    const firstnameError = validateName(firstname);
+    const lastnameError = validateName(lastname);
     const passwordError = validatePassword(password);
     const confirmPasswordError = validateConfirmPassword(confirmPassword);
-    
+
     setErrors({
       email: emailError,
+      firstname: firstnameError,
+      lastname: lastnameError,
       password: passwordError,
       confirmPassword: confirmPasswordError,
     });
-  
-    if (!emailError && !passwordError && !confirmPasswordError) {
+
+    if (
+      !emailError &&
+      !firstnameError &&
+      !lastnameError &&
+      !passwordError &&
+      !confirmPasswordError
+    ) {
       console.log('Form is valid, proceed with signup');
       // Add signup logic here
     }
   };
 
+  // JSX Return
   return (
     <div className={`signup-container ${darkMode ? 'dark-mode' : ''}`}>
       <div className="theme-toggle">
@@ -80,21 +105,59 @@ function Signup() {
           {darkMode ? '☀️' : '🌙'}
         </button>
       </div>
-      
+
       <div className="signup-form-container">
         <h1>Sign Up</h1>
         <p className="welcome-text">Join us today! 🎉</p>
-        
-        <button className="google-btn">
-          <img src={googleIcon} alt="Google" className="google-icon" />
-          Sign up with Google
-        </button>
-        
-        <div className="divider">
-          <span>or Sign up with Email</span>
-        </div>
-        
+
         <form onSubmit={handleSubmit}>
+          {/* First Name Input */}
+          <div className="form-group">
+            <label htmlFor="firstname">First Name</label>
+            <input
+              type="text"
+              id="firstname"
+              placeholder="E.g. John"
+              value={firstname}
+              onChange={(e) => {
+                setFirstname(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  firstname: validateName(e.target.value),
+                }));
+              }}
+              required
+              className={errors.firstname ? 'invalid' : ''}
+            />
+            {errors.firstname && (
+              <div className="error-message">{errors.firstname}</div>
+            )}
+          </div>
+
+          {/* Last Name Input */}
+          <div className="form-group">
+            <label htmlFor="lastname">Last Name</label>
+            <input
+              type="text"
+              id="lastname"
+              placeholder="E.g. Doe"
+              value={lastname}
+              onChange={(e) => {
+                setLastname(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  lastname: validateName(e.target.value),
+                }));
+              }}
+              required
+              className={errors.lastname ? 'invalid' : ''}
+            />
+            {errors.lastname && (
+              <div className="error-message">{errors.lastname}</div>
+            )}
+          </div>
+
+          {/* Email Input */}
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -104,40 +167,50 @@ function Signup() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setErrors(prev => ({ ...prev, email: validateEmail(e.target.value) }));
+                setErrors((prev) => ({
+                  ...prev,
+                  email: validateEmail(e.target.value),
+                }));
               }}
               required
               className={errors.email ? 'invalid' : ''}
             />
             {errors.email && <div className="error-message">{errors.email}</div>}
           </div>
-          
+
+          {/* Password Input */}
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="password-input">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  setErrors(prev => ({ ...prev, password: validatePassword(e.target.value) }));
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: validatePassword(e.target.value),
+                  }));
                 }}
                 required
                 className={errors.password ? 'invalid' : ''}
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
+                {showPassword ? '👁️' : '👁️‍🗨️'}
               </button>
             </div>
-            {errors.password && <div className="error-message">{errors.password}</div>}
+            {errors.password && (
+              <div className="error-message">{errors.password}</div>
+            )}
           </div>
-          
+
+          {/* Confirm Password Input */}
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input
@@ -147,19 +220,28 @@ function Signup() {
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
-                setErrors(prev => ({ ...prev, confirmPassword: validateConfirmPassword(e.target.value) }));
+                setErrors((prev) => ({
+                  ...prev,
+                  confirmPassword: validateConfirmPassword(e.target.value),
+                }));
               }}
               required
               className={errors.confirmPassword ? 'invalid' : ''}
             />
-            {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
+            {errors.confirmPassword && (
+              <div className="error-message">{errors.confirmPassword}</div>
+            )}
           </div>
-          
-          <button type="submit" className="signup-btn">Sign Up</button>
+
+          {/* Submit Button */}
+          <button type="submit" className="signup-btn">
+            Sign Up
+          </button>
         </form>
-        
+
+        {/* Sign-In Prompt */}
         <p className="signin-prompt">
-        Already have an account? <Link to="/signin">Login</Link>
+          Already have an account? <Link to="/signin">Login</Link>
         </p>
       </div>
     </div>
