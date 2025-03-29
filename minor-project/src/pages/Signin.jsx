@@ -78,14 +78,14 @@ function Signin() {
         <h1>Login</h1>
         <p className="welcome-text">Hi, Welcome back 👋</p>
         
-        <button className="google-btn">
+        {/* <button className="google-btn">
           <img src={googleIcon} alt="Google" className="google-icon"  />
           Login with Google
-        </button>
+        </button> */}
         
-        <div className="divider">
+        {/* <div className="divider">
           <span>or Login with Email</span>
-        </div>
+        </div> */}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
