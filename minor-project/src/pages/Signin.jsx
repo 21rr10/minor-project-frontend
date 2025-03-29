@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Signin.css';
 
-// import googleIcon from '../assets/google-icon.svg';
-
 function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [errors,setErrors]=useState({email:'',password:''});
-
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [apiResponse, setApiResponse] = useState(null);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,7 +25,7 @@ function Signin() {
     if (!/[0-9]/.test(password)) return 'Include at least one number';
     return '';
   };
-  
+
   useEffect(() => {
     const savedMode = localStorage.getItem('darkMode');
     if (savedMode === 'true') {
@@ -40,7 +38,7 @@ function Signin() {
     const newMode = !darkMode;
     setDarkMode(newMode);
     localStorage.setItem('darkMode', newMode.toString());
-    
+
     if (newMode) {
       document.body.classList.add('dark-mode');
     } else {
@@ -48,23 +46,50 @@ function Signin() {
     }
   };
 
+  // Define async function to hit the API
+  useEffect(() => {
+    async function loginApiCall() {
+      try {
+        // Dummy API endpoint
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+        console.log('API Response:', data);
+        setApiResponse(data); // Store the response
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    }
+
+    // Call the API only if form is valid
+    if (apiResponse === null && !errors.email && !errors.password && email && password) {
+      loginApiCall();
+    }
+  }, [apiResponse, email, password, errors]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-    
+
     setErrors({
       email: emailError,
-      password: passwordError
+      password: passwordError,
     });
-  
+
+    // Reset API response to trigger useEffect
     if (!emailError && !passwordError) {
+      setApiResponse(null); // Reset response state
       console.log('Form is valid, proceed with submission');
-      // Add your submission logic here
     }
   };
-  
 
   return (
     <div className={`signin-container ${darkMode ? 'dark-mode' : ''}`}>
@@ -73,20 +98,11 @@ function Signin() {
           {darkMode ? '☀️' : '🌙'}
         </button>
       </div>
-      
+
       <div className="signin-form-container">
         <h1>Login</h1>
         <p className="welcome-text">Hi, Welcome back 👋</p>
-        
-        {/* <button className="google-btn">
-          <img src={googleIcon} alt="Google" className="google-icon"  />
-          Login with Google
-        </button> */}
-        
-        {/* <div className="divider">
-          <span>or Login with Email</span>
-        </div> */}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -97,7 +113,7 @@ function Signin() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setErrors(prev => ({...prev, email: validateEmail(e.target.value)}));
+                setErrors((prev) => ({ ...prev, email: validateEmail(e.target.value) }));
               }}
               required
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
@@ -105,34 +121,34 @@ function Signin() {
             />
             {errors.email && <div className="error-message">{errors.email}</div>}
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="password-input">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrors(prev => ({...prev, password: validatePassword(e.target.value)}));
-                  }}
-                  required
-                  minLength="8"
-                  className={errors.password ? 'invalid' : ''}  
+                  setPassword(e.target.value);
+                  setErrors((prev) => ({ ...prev, password: validatePassword(e.target.value) }));
+                }}
+                required
+                minLength="8"
+                className={errors.password ? 'invalid' : ''}
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
+                {showPassword ? '👁️' : '👁️‍🗨️'}
               </button>
             </div>
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
-          
+
           <div className="form-footer">
             <div className="remember-me">
               <input
@@ -145,101 +161,16 @@ function Signin() {
             </div>
             <a href="#" className="forgot-password">Forgot Password?</a>
           </div>
-          
+
           <button type="submit" className="login-btn">Login</button>
         </form>
-        
+
         <p className="signup-prompt">
-        Not registered yet? <Link to="/signup">Create an account</Link>
-      </p>
+          Not registered yet? <Link to="/signup">Create an account</Link>
+        </p>
       </div>
     </div>
   );
 }
 
-export default Signin; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Signin;
