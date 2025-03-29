@@ -18,6 +18,8 @@ function Signup() {
     confirmPassword: '',
   });
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   // Validation Functions
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,7 +69,37 @@ function Signup() {
     }
   };
 
+  // API Call using useEffect
+  useEffect(() => {
+    if (formSubmitted) {
+      const submitDataToAPI = async () => {
+        try {
+          const response = await fetch('https://dummyjson.com/users/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              firstName: firstname,
+              lastName: lastname,
+              email,
+              password,
+            }),
+          });
 
+          const data = await response.json();
+          console.log('API Response:', data);
+
+          // Reset form after successful submission
+          setFormSubmitted(false);
+        } catch (error) {
+          console.error('Error submitting data:', error);
+        }
+      };
+
+      submitDataToAPI();
+    }
+  }, [formSubmitted, firstname, lastname, email, password]);
+
+  // Form Submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -92,8 +124,8 @@ function Signup() {
       !passwordError &&
       !confirmPasswordError
     ) {
-      console.log('Form is valid, proceed with signup');
-      // Add signup logic here
+      console.log('Form is valid, proceeding with API call');
+      setFormSubmitted(true); // Trigger the API call via useEffect
     }
   };
 
