@@ -32,7 +32,7 @@ function Signup() {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Validation Functions
+
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) return 'Email is required';
@@ -98,11 +98,12 @@ const validatePhone = (phone) => {
             body: JSON.stringify({
               firstname: firstname,
               lastname: lastname,
-              email,
-              password,
-              phonenumber
+              email:email,
+              password:password,
+              phone:Number(phone)
             }),
           });
+          
   
           const data = await response.json();
   

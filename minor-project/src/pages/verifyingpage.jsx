@@ -16,7 +16,7 @@ const VerifyingPage = () => {
       }
 
       try {
-        const response = await fetch(`${url}/verify-token`, {
+        const response = await fetch(`${url}/user/verify-token`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -27,7 +27,7 @@ const VerifyingPage = () => {
         const data = await response.json();
 
         if (response.ok) {
-          navigate("/dashboard");
+          navigate("/moodSelection");
         } else {
           setError(data.message || "Verification failed.");
           setTimeout(() => navigate("/signup"), 2000); 
