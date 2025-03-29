@@ -6,6 +6,7 @@ function Signup() {
   const url = import.meta.env.VITE_BACKEND_URL;
   const [email, setEmail] = useState('');
   const [firstname, setFirstname] = useState('');
+  const [phone, setPhone] = useState('');
   const [lastname, setLastname] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,6 +16,7 @@ function Signup() {
     email: '',
     firstname: '',
     lastname: '',
+    phone:'',
     password: '',
     confirmPassword: '',
   });
@@ -43,6 +45,13 @@ function Signup() {
     if (!/^[a-zA-Z\s]+$/.test(name)) return 'Only letters are allowed';
     return '';
   };
+const validatePhone = (phone) => {
+  const phoneRegex = /^[0-9]{10}$/; // Ensures exactly 10 digits
+  if (!phone.trim()) return 'This field is required';
+  if (!phoneRegex.test(phone)) return 'Phone number must be exactly 10 digits';
+  return '';
+};
+
 
   const validatePassword = (password) => {
     if (!password) return 'Password is required';
@@ -91,7 +100,7 @@ function Signup() {
               lastname: lastname,
               email,
               password,
-              phonenumber:1234569
+              phonenumber
             }),
           });
   
@@ -116,7 +125,7 @@ function Signup() {
   
       submitDataToAPI();
     }
-  }, [formSubmitted, firstname, lastname, email, password]);
+  }, [formSubmitted, firstname, lastname,phone, email, password]);
   
 
   // Form Submission
@@ -128,6 +137,7 @@ function Signup() {
     const lastnameError = validateName(lastname);
     const passwordError = validatePassword(password);
     const confirmPasswordError = validateConfirmPassword(confirmPassword);
+    const phoneError=validatePhone(phone);
 
     setErrors({
       email: emailError,
@@ -135,6 +145,7 @@ function Signup() {
       lastname: lastnameError,
       password: passwordError,
       confirmPassword: confirmPasswordError,
+      phone:phoneError
     });
 
     if (
@@ -142,7 +153,8 @@ function Signup() {
       !firstnameError &&
       !lastnameError &&
       !passwordError &&
-      !confirmPasswordError
+      !confirmPasswordError&&
+      !phoneError
     ) {
       console.log('Form is valid, proceeding with API call');
       setFormSubmitted(true); // Trigger the API call via useEffect
@@ -208,6 +220,29 @@ function Signup() {
               <div className="error-message">{errors.lastname}</div>
             )}
           </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">Phone Number</label>
+            <input
+              type="text"
+              id="phone"
+              placeholder="+91 9508381490"
+              value={phone}
+              onChange={(e) => {
+                setPhone(e.target.value); // Correctly updating the phone state
+                setErrors((prev) => ({
+                  ...prev,
+                  phone: validatePhone(e.target.value), // Validating phone input
+                }));
+              }}
+              required
+              className={errors.phone ? 'invalid' : ''} // Updated to use errors.phone
+            />
+            {errors.phone && (
+              <div className="error-message">{errors.phone}</div> // Displaying phone-specific error
+            )}
+          </div>
+
 
           {/* Email Input */}
           <div className="form-group">
