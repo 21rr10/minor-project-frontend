@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './Signup.css';
 
 function Signup() {
+  const url = import.meta.env.VITE_BACKEND_URL;
   const [email, setEmail] = useState('');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
@@ -69,35 +70,45 @@ function Signup() {
     }
   };
 
-  // API Call using useEffect
   useEffect(() => {
     if (formSubmitted) {
       const submitDataToAPI = async () => {
         try {
-          const response = await fetch('https://dummyjson.com/users/add', {
+          const response = await fetch(`${url}/user/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              firstName: firstname,
-              lastName: lastname,
+              firstname: firstname,
+              lastname: lastname,
               email,
               password,
+              phonenumber:1234569
             }),
           });
-
+  
           const data = await response.json();
-          console.log('API Response:', data);
-
-          // Reset form after successful submission
+  
+          if (data.message === "email already taken" || data.message === "email already taken/incorrect inputs") {
+            setErrors((prev) => ({ ...prev, email: data.message }));
+          } else if (data.token) {
+            localStorage.setItem('authToken', data.token);
+            console.log('User created successfully:', data);
+         
+            window.location.href = "/"; 
+          }
+  
           setFormSubmitted(false);
         } catch (error) {
           console.error('Error submitting data:', error);
+          setErrors((prev) => ({ ...prev, email: "Signup failed. Please try again." }));
+          setFormSubmitted(false);
         }
       };
-
+  
       submitDataToAPI();
     }
   }, [formSubmitted, firstname, lastname, email, password]);
+  
 
   // Form Submission
   const handleSubmit = (e) => {
