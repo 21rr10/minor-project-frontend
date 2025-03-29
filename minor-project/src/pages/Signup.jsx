@@ -67,7 +67,7 @@ function Signup() {
     }
   };
 
-  // Form Submission
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
