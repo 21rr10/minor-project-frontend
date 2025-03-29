@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css';
 
 function Signup() {
@@ -18,6 +18,15 @@ function Signup() {
     password: '',
     confirmPassword: '',
   });
+
+  const navigate = useNavigate();
+  useEffect(() => {
+   
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate('/'); 
+    }
+  }, [navigate]);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 

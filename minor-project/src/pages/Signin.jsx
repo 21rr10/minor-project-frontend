@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signin.css';
 
 // import googleIcon from '../assets/google-icon.svg';
@@ -11,7 +11,15 @@ function Signin() {
   const [rememberMe, setRememberMe] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [errors,setErrors]=useState({email:'',password:''});
+  const navigate = useNavigate();
 
+  useEffect(() => {
+   
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate('/'); 
+    }
+  }, [navigate]);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

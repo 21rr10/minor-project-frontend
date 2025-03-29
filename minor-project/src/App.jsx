@@ -11,6 +11,7 @@ import ItineraryPage from "./pages/itinerary";
 import TravelDetailsPage from "./pages/Travel_deets";
 import Check from "./pages/check";
 import ErrorPage from "./pages/ErrorPage"; 
+import VerifyingPage from "./pages/verifyingpage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/itinerary" element={<ItineraryPage />} />
         <Route path="/travelDetails" element={<TravelDetailsPage />} />
         <Route path="/systemcheck" element={<Check />} />
+        <Route path="/verifying" element={<VerifyingPage />} />
         <Route path="*" element={<ErrorPage/>} />
       </Routes>
     </Router>
