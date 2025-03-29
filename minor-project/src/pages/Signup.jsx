@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css';
 
 function Signup() {
@@ -21,9 +21,18 @@ function Signup() {
     confirmPassword: '',
   });
 
+  const navigate = useNavigate();
+  useEffect(() => {
+   
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate('/'); 
+    }
+  }, [navigate]);
+
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Validation Functions
+
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) return 'Email is required';
@@ -89,11 +98,12 @@ const validatePhone = (phone) => {
             body: JSON.stringify({
               firstname: firstname,
               lastname: lastname,
-              email,
-              password,
-              phonenumber
+              email:email,
+              password:password,
+              phone:Number(phone)
             }),
           });
+          
   
           const data = await response.json();
   

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signin.css';
 
 function Signin() {
@@ -8,8 +8,8 @@ function Signin() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [errors, setErrors] = useState({ email: '', password: '' });
-  const [apiResponse, setApiResponse] = useState(null);
+  const [errors,setErrors]=useState({email:'',password:''});
+
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
