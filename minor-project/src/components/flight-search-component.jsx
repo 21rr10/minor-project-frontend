@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Globe, Users } from 'lucide-react';
-import { format } from 'date-fns';
+import { Calendar, Users } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
