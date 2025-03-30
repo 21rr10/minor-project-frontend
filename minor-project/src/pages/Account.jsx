@@ -27,23 +27,7 @@ function Account() {
   
   // State for form data when editing
   const [formData, setFormData] = useState({...profileData});
-  
-  // State for dependents
-  const [dependents, setDependents] = useState([
-    {
-      id: 1,
-      name: 'Michael Johnson',
-      relationship: 'Spouse',
-      dob: '1985-04-12'
-    },
-    {
-      id: 2,
-      name: 'Emma Johnson',
-      relationship: 'Child',
-      dob: '2015-09-23'
-    }
-  ]);
-  
+    
   // State for bookings
   const [bookings, setBookings] = useState([
     {
@@ -112,32 +96,19 @@ function Account() {
       });
     }
   };
-  
-  // Function to add a new dependent
-  const addDependent = () => {
-    const newDependent = {
-      id: Date.now(),
-      name: 'New Dependent',
-      relationship: 'Other',
-      dob: '2000-01-01'
-    };
     
-    setDependents([...dependents, newDependent]);
-  };
-  
-  // Function to delete a dependent
-  const deleteDependent = (id) => {
-    setDependents(dependents.filter(dep => dep.id !== id));
-  };
-  
-  // Function to format dates
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      margin: 0,
+      padding: 0,
+      overflow: "auto"
+    }}>
 
       {/* Header */}
       <div className="bg-indigo-900 text-white">
@@ -174,28 +145,7 @@ function Account() {
               )}
               
               {/* Security Tab */}
-              {activeTab === 'security' && <SecurityTab />}
-              
-              {/* Dependents Tab */}
-              {activeTab === 'dependents' && (
-                <DependentsTab 
-                  dependents={dependents}
-                  addDependent={addDependent}
-                  deleteDependent={deleteDependent}
-                  formatDate={formatDate}
-                />
-              )}
-              
-              {/* Bookings Tab */}
-              {activeTab === 'bookings' && (
-                <BookingsTab 
-                  bookings={bookings}
-                  showCalendarView={showCalendarView}
-                  setShowCalendarView={setShowCalendarView}
-                  formatDate={formatDate}
-                />
-              )}
-              
+              {activeTab === 'security' && <SecurityTab />}              
             </div>
           </div>
         </div>
