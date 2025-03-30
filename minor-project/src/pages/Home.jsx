@@ -49,7 +49,7 @@
 // export default Home;
 
 
-import FlightSearchComponent from "../components/flightSearch";
+import FlightSearchComponent from "../components/flight-search-component";
 import Header from "../components/header";
 
 function Home() {
