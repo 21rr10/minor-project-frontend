@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Avatar = ({ name, onSignOut }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -61,13 +62,17 @@ const Header = () => {
       setUserName(storedName);
     }
   }, []);
+  const navigate = useNavigate();
+
 
   const handleSignOut = () => {
     // Clear authentication data
     localStorage.removeItem("authToken");
     localStorage.removeItem("userName");
+  
     // Reset user state
     setUserName(null);
+    navigate("/");
     // Optionally redirect to login page
     // window.location.href = "/login";
   };
