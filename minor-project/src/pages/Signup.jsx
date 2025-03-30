@@ -96,14 +96,13 @@ const validatePhone = (phone) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              firstname: firstname,
-              lastname: lastname,
-              email:email,
-              password:password,
-              phone:Number(phone)
+              firstname,
+              lastname,
+              email,
+              password,
+              phone: Number(phone),
             }),
           });
-          
   
           const data = await response.json();
   
@@ -111,9 +110,9 @@ const validatePhone = (phone) => {
             setErrors((prev) => ({ ...prev, email: data.message }));
           } else if (data.token) {
             localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userName', `${data.name}`); // Store the name
             console.log('User created successfully:', data);
-         
-            window.location.href = "/"; 
+            window.location.href = "/";
           }
   
           setFormSubmitted(false);
@@ -126,7 +125,8 @@ const validatePhone = (phone) => {
   
       submitDataToAPI();
     }
-  }, [formSubmitted, firstname, lastname,phone, email, password]);
+  }, [formSubmitted, firstname, lastname, phone, email, password]);
+  
   
 
   // Form Submission

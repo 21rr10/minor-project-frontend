@@ -64,12 +64,13 @@ function Signin() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await response.json();
       console.log('API Response:', data);
-
+  
       if (response.ok && data.token) {
         localStorage.setItem('authToken', data.token);
+        localStorage.setItem('userName', data.name); // Store the name
         navigate('/');
       } else {
         setErrors({ email: 'Invalid email or password', password: 'Invalid email or password' });
@@ -80,6 +81,7 @@ function Signin() {
     }
     setLoading(false);
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
