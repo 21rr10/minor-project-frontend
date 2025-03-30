@@ -3,28 +3,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Signin.css';
 
 function Signin() {
+  const url = import.meta.env.VITE_BACKEND_URL;
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [errors,setErrors]=useState({email:'',password:''});
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState(false);
 
-
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return 'Email is required';
-    if (!re.test(email)) return 'Invalid email format';
-    return '';
-  };
-
-  const validatePassword = (password) => {
-    if (!password) return 'Password is required';
-    if (password.length < 8) return 'Password must be at least 8 characters';
-    if (!/[A-Z]/.test(password)) return 'Include at least one uppercase letter';
-    if (!/[0-9]/.test(password)) return 'Include at least one number';
-    return '';
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate('/'); // Redirect if already logged in
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const savedMode = localStorage.getItem('darkMode');
@@ -46,32 +41,45 @@ function Signin() {
     }
   };
 
-  // Define async function to hit the API
-  useEffect(() => {
-    async function loginApiCall() {
-      try {
-        // Dummy API endpoint
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return 'Email is required';
+    if (!re.test(email)) return 'Invalid email format';
+    return '';
+  };
 
-        const data = await response.json();
-        console.log('API Response:', data);
-        setApiResponse(data); // Store the response
-      } catch (error) {
-        console.error('Error calling API:', error);
+  const validatePassword = (password) => {
+    if (!password) return 'Password is required';
+    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!/[A-Z]/.test(password)) return 'Include at least one uppercase letter';
+    if (!/[0-9]/.test(password)) return 'Include at least one number';
+    return '';
+  };
+
+  const loginApiCall = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${url}/user/signin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      console.log('API Response:', data);
+
+      if (response.ok && data.token) {
+        localStorage.setItem('authToken', data.token);
+        navigate('/');
+      } else {
+        setErrors({ email: 'Invalid email or password', password: 'Invalid email or password' });
       }
+    } catch (error) {
+      console.error('Error calling API:', error);
+      setErrors({ email: 'Network error, please try again later', password: '' });
     }
-
-    // Call the API only if form is valid
-    if (apiResponse === null && !errors.email && !errors.password && email && password) {
-      loginApiCall();
-    }
-  }, [apiResponse, email, password, errors]);
+    setLoading(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,15 +87,10 @@ function Signin() {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
 
-    setErrors({
-      email: emailError,
-      password: passwordError,
-    });
+    setErrors({ email: emailError, password: passwordError });
 
-    // Reset API response to trigger useEffect
     if (!emailError && !passwordError) {
-      setApiResponse(null); // Reset response state
-      console.log('Form is valid, proceed with submission');
+      loginApiCall(); // Only call API after user clicks login button
     }
   };
 
@@ -116,7 +119,6 @@ function Signin() {
                 setErrors((prev) => ({ ...prev, email: validateEmail(e.target.value) }));
               }}
               required
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               className={errors.email ? 'invalid' : ''}
             />
             {errors.email && <div className="error-message">{errors.email}</div>}
@@ -135,7 +137,6 @@ function Signin() {
                   setErrors((prev) => ({ ...prev, password: validatePassword(e.target.value) }));
                 }}
                 required
-                minLength="8"
                 className={errors.password ? 'invalid' : ''}
               />
               <button
@@ -162,7 +163,9 @@ function Signin() {
             <a href="#" className="forgot-password">Forgot Password?</a>
           </div>
 
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
         <p className="signup-prompt">
