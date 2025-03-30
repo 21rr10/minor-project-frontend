@@ -7,7 +7,7 @@ const MoodSelectionPage = () => {
   // const navigate = useNavigate();
   
   const [selectedMood, setSelectedMood] = useState('');
-  
+
   // List of moods with emojis and descriptions
   const moods = [
     { id: 'spiritual', name: 'Spiritual', emoji: '🙏', description: 'Find peace in temples, shrines, and sacred spaces' },
@@ -23,7 +23,7 @@ const MoodSelectionPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!selectedMood) {
-      alert('Please select a mood to continue');
+      alert('Please select your preference to continue');
       return;
     }
     
@@ -36,41 +36,48 @@ const MoodSelectionPage = () => {
   };
 
   return (
-    <div>
-            <Header/>
-   
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col justify-center items-center p-6">
-
-      <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full p-8">
+    <div className="w-full h-screen flex flex-col" style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      margin: 0,
+      padding: 0,
+      overflow: "hidden"
+  }}  >
+      <Header />
+      
+      <div className="flex-1 w-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col justify-center items-center p-6">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-indigo-800 mb-4">Let's Personalize Your Experience</h1>
-          <p className="text-lg text-gray-600">
-            Tell us what mood you're in for this trip, and we'll curate the perfect experiences for you.
+          <p className="text-lg text-gray-700">
+            Select your preference for this trip, and we'll curate the perfect experiences for you.
           </p>
         </div>
         
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 gap-4 mb-8">
-            <label className="block text-lg font-medium text-gray-700 mb-2">
+        <form onSubmit={handleSubmit} className="w-full max-w-6xl">
+          <div className="mb-10">
+            <h2 className="text-2xl font-medium text-indigo-800 mb-6 text-center">
               I'm feeling...
-            </label>
+            </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {moods.map((mood) => (
                 <div
                   key={mood.id}
                   onClick={() => setSelectedMood(mood.id)}
                   className={`
-                    p-4 rounded-xl cursor-pointer transition-all duration-300
+                    p-4 rounded-xl cursor-pointer transition-all duration-300 backdrop-blur-sm
                     ${selectedMood === mood.id 
-                      ? 'bg-indigo-100 border-2 border-indigo-500 shadow-md' 
-                      : 'bg-gray-50 border border-gray-200 hover:bg-gray-100'}
+                      ? 'bg-white/80 border-2 border-indigo-500 shadow-lg' 
+                      : 'bg-white/50 border border-white/70 hover:bg-white/60'}
                   `}
                 >
                   <div className="flex flex-col items-center text-center">
                     <span className="text-4xl mb-2">{mood.emoji}</span>
                     <h3 className="font-medium text-lg mb-1">{mood.name}</h3>
-                    <p className="text-sm text-gray-600">{mood.description}</p>
+                    <p className="text-sm text-gray-700">{mood.description}</p>
                   </div>
                 </div>
               ))}
@@ -87,7 +94,6 @@ const MoodSelectionPage = () => {
           </div>
         </form>
       </div>
-    </div>
     </div>
   );
 };
