@@ -89,7 +89,7 @@ const Header = () => {
           {/* Navigation */}
           <div className="hidden md:flex items-center gap-8">
             <ul className="flex items-center gap-6">
-              {["Destinations", "Experiences", "Inspirations", "Trip Finder", "About Us"].map((item) => (
+              {["Destinations",  "About Us"].map((item) => (
                 <li key={item}>
                   <a
                     href="#"
