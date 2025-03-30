@@ -36,16 +36,16 @@ const MoodSelectionPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col" style={{
-      position: "fixed",
+    <div className="w-full min-h-screen flex flex-col" style={{
+      position: "absolute",
       top: 0,
       left: 0,
       width: "100%",
       height: "100%",
       margin: 0,
       padding: 0,
-      overflow: "hidden"
-  }}  >
+      overflow: "auto"
+    }}>
       <Header />
       
       <div className="flex-1 w-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col justify-center items-center p-6">
