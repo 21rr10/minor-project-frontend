@@ -26,11 +26,11 @@ const FlightSearchComponent = () => {
       <div className="backdrop-blur-md rounded-xl shadow-xl p-6 w-full max-w-5xl bg-transparent flex justify-center items-center">
         <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-center gap-4">
           <div className="relative flex-1">
-            <Globe className="absolute left-3 top-3 text-gray-400" />
+            {/* <Globe className="absolute left-3 top-3 text-gray-400" /> */}
             <input type="text" value={origin} onChange={(e) => setOrigin(e.target.value)} placeholder="From" className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
           </div>
           <div className="relative flex-1">
-            <Globe className="absolute left-3 top-3 text-gray-400" />
+            {/* <Globe className="absolute left-3 top-3 text-gray-400" /> */}
             <input type="text" value={destination} onChange={(e) => setDestination(e.target.value)} placeholder="To" className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
           </div>
           <div className="relative flex-1">
