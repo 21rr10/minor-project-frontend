@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Mail, Phone, MapPin, Edit2 } from 'lucide-react';
+import { User, Mail, Phone, Edit2 } from 'lucide-react';
 
 const PersonalInfoTab = ({ profileData, editingSection, formData, handleInputChange, startEditing, cancelEditing, saveChanges }) => {
   return (
@@ -109,13 +109,7 @@ const PersonalInfoTab = ({ profileData, editingSection, formData, handleInputCha
               <p className="text-base">{profileData.phone}</p>
             </div>
           </div>
-          <div className="flex items-start">
-            <MapPin className="h-5 w-5 text-gray-500 mt-1 mr-4" />
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Address</h3>
-              <p className="text-base">{profileData.address}</p>
-            </div>
-          </div>
+          
         </div>
       )}
     </div>
