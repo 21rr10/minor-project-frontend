@@ -88,19 +88,44 @@ const Header = () => {
 
           {/* Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <ul className="flex items-center gap-6">
-              {["Contact Us",  "About Us","SignUp","Login"].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            
+                <ul className="flex items-center gap-6">
+                  <li>
+                    <a 
+                      href="/contactUs" 
+                      className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
+                    >
+                      Contact Us
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/aboutUs" 
+                      className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
+                    >
+                      About Us
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/signup" 
+                      className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
+                    >
+                      SignUp
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="./Signin" 
+                      className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
+                    >
+                      SignIn 
+                    </a>
+                  </li>
+                </ul>
+              
           </div>
+
 
           {/* Right Side: Avatar (only if logged in) */}
           <div className="flex items-center gap-4">

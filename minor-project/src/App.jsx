@@ -28,7 +28,8 @@ function App() {
         <Route path="/systemcheck" element={<Check />} />
         <Route path="/verifying" element={<VerifyingPage />} />
         <Route path="*" element={<ErrorPage/>} />
-        <Route path="/about" element={<AboutUs/>} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact"  element={<contactUs/>} />
       </Routes>
     </Router>
   );
