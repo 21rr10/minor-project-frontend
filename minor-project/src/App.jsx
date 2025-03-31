@@ -12,6 +12,7 @@ import TravelDetailsPage from "./pages/Travel_deets";
 import Check from "./pages/check";
 import ErrorPage from "./pages/ErrorPage"; 
 import VerifyingPage from "./pages/verifyingpage";
+import AboutUs from "./pages/aboutUs";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/systemcheck" element={<Check />} />
         <Route path="/verifying" element={<VerifyingPage />} />
         <Route path="*" element={<ErrorPage/>} />
+        <Route path="/about" element={<AboutUs/>} />
       </Routes>
     </Router>
   );
