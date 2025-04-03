@@ -100,7 +100,7 @@ const Header = () => {
                   </li>
                   <li>
                     <a 
-                      href="/aboutUs" 
+                      href="./about" 
                       className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
                     >
                       About Us
