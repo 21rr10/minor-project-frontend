@@ -3,7 +3,7 @@ import { Calendar, Cloud, CloudRain, CloudSnow, Sun, Thermometer, Umbrella, Wind
 import Header from '../components/header';
 
 const TravelDetailsPage = () => {
-  // State for the data
+  const url = import.meta.env.VITE_BACKEND_URL;
   const [weatherData, setWeatherData] = useState(null);
   const [flightData, setFlightData] = useState(null);
   const [hotelData, setHotelData] = useState(null);
@@ -27,7 +27,7 @@ const TravelDetailsPage = () => {
         const location = localStorage.getItem("location");
         const mood = localStorage.getItem("mood");
         
-        const response = await fetch('/api/v1/weather', {
+        const response = await fetch(`${url}/system/weather-bot`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ const TravelDetailsPage = () => {
         // Format the date to YYYY-MM-DD
         const formattedDepartureDate = formatDateToYYYYMMDD(checkInDate);
         
-        const response = await fetch('/api/v1/flight', {
+        const response = await fetch(`${url}/system/flight`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ const TravelDetailsPage = () => {
           throw new Error("Location not found in localStorage");
         }
         
-        const response = await fetch('/api/v1/hotel', {
+        const response = await fetch(`${url}/system/hotels`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
