@@ -31,7 +31,7 @@ function App() {
         <Route path="*" element={<ErrorPage/>} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact"  element={<ContactUs/>} />
-        <Route path="/loader" element={<Loader/>} />
+        {/* <Route path="/loader" element={<Loader/>} /> */}
       </Routes>
     </Router>
   );
