@@ -76,7 +76,7 @@ const Header = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="text-2xl font-bold bg-gradient-to-r from-white to-[#00e5ff] bg-clip-text text-transparent">
-            TravelEase
+            WayVisor
           </div>
 
           {/* Navigation */}

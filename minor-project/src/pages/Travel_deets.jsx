@@ -320,12 +320,7 @@ const TravelDetailsPage = () => {
                           <p className="text-gray-600 text-sm mb-2">{hotel.address}</p>
                           <p className="text-gray-500 text-xs">{hotel.city_country}</p>
                           
-                          <div className="flex justify-between items-center mt-4">
-                            <div className="flex items-center text-indigo-600 text-sm">
-                              <span>View Details</span>
-                              <ExternalLink className="h-4 w-4 ml-1" />
-                            </div>
-                          </div>
+                          
                         </div>
                       </div>
                     ))}
