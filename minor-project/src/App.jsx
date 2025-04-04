@@ -14,6 +14,7 @@ import ErrorPage from "./pages/ErrorPage";
 import VerifyingPage from "./pages/verifyingpage";
 import AboutUs from "./pages/aboutUs";
 import ContactUs from "./pages/contactUs";
+import Loader from "./pages/loader";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
         <Route path="*" element={<ErrorPage/>} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact"  element={<ContactUs/>} />
-        {/* <Route path="/loader" element={<Loader/>} /> */}
+        <Route path="/loader" element={<Loader/>} />
       </Routes>
     </Router>
   );
