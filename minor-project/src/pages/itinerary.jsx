@@ -30,41 +30,45 @@ function createResource(promise) {
   };
 }
 
-// Fetch function for itinerary data
-const fetchItineraryData = (destination, mood) => {
-  return fetch('/api/v1/itinerary', {
+// Fetch function for itinerary data with retry logic
+const fetchItineraryData = (destination, mood, retryCount = 0) => {
+  const url = import.meta.env.VITE_BACKEND_URL;
+
+  return fetch(`${url}/system/itinerary-temp`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ location: destination, mood })
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to fetch itinerary data');
-    }
-    return response.json();
-  })
-  .then(data => {
-    // Transform API response to the format needed by the component
-    const attractions = data.itinerary.itinerary.map((name, index) => ({
-      id: index + 1,
-      name,
-      description: `One of the most significant attractions in ${data.itinerary.location}. A must-visit for anyone exploring the city.`,
-      rating: (4 + Math.random()).toFixed(1),
-      visitDuration: Math.floor(Math.random() * 3) + 1, // 1-3 hours
-      highlights: [
-        'Popular attraction',
-        'Cultural significance',
-        'Scenic beauty'
-      ]
-    }));
-    
-    return {
-      cityName: data.itinerary.location,
-      attractions
-    };
-  });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch itinerary data');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // Transform API response to the format needed by the component
+      const attractions = data.itinerary.itinerary.map((name, index) => ({
+        id: index + 1,
+        name,
+        description: `One of the most significant attractions in ${data.itinerary.location}. A must-visit for anyone exploring the city.`,
+        rating: (4 + Math.random()).toFixed(1),
+        visitDuration: Math.floor(Math.random() * 3) + 1, // 1-3 hours
+        highlights: ['Popular attraction', 'Cultural significance', 'Scenic beauty']
+      }));
+
+      return {
+        cityName: data.itinerary.location,
+        attractions
+      };
+    })
+    .catch((error) => {
+      if (retryCount < 3) {
+        return fetchItineraryData(destination, mood, retryCount + 1); // Retry up to 3 times
+      }
+      throw error;
+    });
 };
 
 // Loading fallback component
@@ -91,10 +95,10 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-gray-50 flex justify-center items-center" >
+        <div className="min-h-screen bg-gray-50 flex justify-center items-center">
           <div className="text-center p-8 bg-white rounded-lg shadow-md">
             <p className="text-red-500 text-xl mb-4">Failed to load itinerary. Please try again.</p>
-            <button 
+            <button
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
               onClick={() => window.location.reload()}
             >
@@ -112,7 +116,7 @@ class ErrorBoundary extends React.Component {
 // Component that reads data from the resource
 const ItineraryContent = ({ resource }) => {
   const itineraryData = resource.read();
-  
+
   return (
     <div className="min-h-screen bg-gray-50" style={{
       position: "absolute",
@@ -124,11 +128,11 @@ const ItineraryContent = ({ resource }) => {
       padding: 0,
       overflow: "auto"
     }}>
-      <Header/>
-      
+      <Header />
+
       <div className="relative bg-indigo-900 text-white">
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4" >
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Discover {itineraryData.cityName}
           </h2>
           <p className="text-xl max-w-3xl mx-auto ">
@@ -136,7 +140,7 @@ const ItineraryContent = ({ resource }) => {
           </p>
         </div>
       </div>
-      
+
       {/* Itinerary Content */}
       <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-10">
@@ -151,7 +155,7 @@ const ItineraryContent = ({ resource }) => {
                 {itineraryData.attractions.length} Destinations
               </div>
             </div>
-            
+
             {/* Timeline of attractions */}
             <div className="space-y-12">
               {itineraryData.attractions.map((attraction, index) => (
@@ -160,7 +164,7 @@ const ItineraryContent = ({ resource }) => {
                   {index < itineraryData.attractions.length - 1 && (
                     <div className="absolute left-8 top-16 bottom-0 w-0.5 bg-gray-200"></div>
                   )}
-                  
+
                   <div className="flex">
                     {/* Day indicator */}
                     <div className="flex-shrink-0 mr-6">
@@ -168,7 +172,7 @@ const ItineraryContent = ({ resource }) => {
                         Day {index + 1}
                       </div>
                     </div>
-                    
+
                     {/* Attraction card */}
                     <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                       <div className="md:flex">
@@ -186,41 +190,14 @@ const ItineraryContent = ({ resource }) => {
             </div>
           </div>
         </div>
-        
+
         {/* Call to action */}
         <div className="text-center">
-          <button 
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-md hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 text-lg"
+          <button
+            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-md hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration=300 text-lg"
             onClick={() => window.location.href = '/travel-details'}
           >
             Let's Explore
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml=2 h=5 w=5" />
           </button>
-          <p className="mt-4 text-gray-600">
-            Ready to see weather conditions, flight prices, and hotel options for your trip?
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Main Itinerary page component
-const ItineraryPage = () => {
-  // Get destination and mood from localStorage
-  const destination = localStorage.getItem("location") || "Chandigarh";
-  const mood = localStorage.getItem("mood") || "adventure";
-  
-  // Create the data resource
-  const itineraryResource = createResource(fetchItineraryData(destination, mood));
-  
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={<LoadingFallback />}>
-        <ItineraryContent resource={itineraryResource} />
-      </Suspense>
-    </ErrorBoundary>
-  );
-};
-
-export default ItineraryPage;
+          <p className='mt=4'>Ready Weather etc?</p>
