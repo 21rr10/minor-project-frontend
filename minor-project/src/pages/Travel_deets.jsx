@@ -343,9 +343,11 @@ const TravelDetailsPage = () => {
         {/* Final CTA */}
         <div className="mt-12 text-center">
           <button 
+            
+            onClick={() => window.location.href = '/'}
             className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-md hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 text-lg"
           >
-            Book Your Perfect Trip Now
+            Let's search for another destination
           </button>
           <p className="mt-4 text-gray-600">
             We'll help you book the best flights and hotels at the best prices.

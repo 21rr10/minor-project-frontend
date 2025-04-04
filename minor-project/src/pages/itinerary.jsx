@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
 import Header from '../components/header';
 
+
 // Create a resource that follows the Suspense contract
 function createResource(promise) {
   let status = 'pending';
@@ -32,7 +33,8 @@ function createResource(promise) {
 
 // Fetch function for itinerary data
 const fetchItineraryData = (destination, mood) => {
-  return fetch('/api/v1/itinerary', {
+  const url = import.meta.env.VITE_BACKEND_URL;
+  return fetch(`${url}/system/itinerary-temp`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -191,7 +193,7 @@ const ItineraryContent = ({ resource }) => {
         <div className="text-center">
           <button 
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-md hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 text-lg"
-            onClick={() => window.location.href = '/travel-details'}
+            onClick={() => window.location.href = '/travelDetails'}
           >
             Let's Explore
             <ArrowRight className="ml-2 h-5 w-5" />
