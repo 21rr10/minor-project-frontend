@@ -3,12 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/header';
 
 const MoodSelectionPage = () => {
-  // For navigation (in a real app)
-  // const navigate = useNavigate();
-  
+  const navigate = useNavigate();
   const [selectedMood, setSelectedMood] = useState('');
 
-  // List of moods with emojis and descriptions
   const moods = [
     { id: 'spiritual', name: 'Spiritual', emoji: '🙏', description: 'Find peace in temples, shrines, and sacred spaces' },
     { id: 'adventurous', name: 'Adventurous', emoji: '🧗‍♂️', description: 'Seek thrills, outdoor activities, and exciting experiences' },
@@ -22,17 +19,16 @@ const MoodSelectionPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!selectedMood) {
       alert('Please select your preference to continue');
       return;
     }
-    
-    // In a real app, navigate to the next page
-    console.log('Selected mood:', selectedMood);
-    // navigate('/itinerary', { state: { mood: selectedMood } });
-    
-    // For demo purposes
-    alert(`You selected: ${selectedMood} mood`);
+
+    // Save to localStorage
+    localStorage.setItem('mood', selectedMood);
+
+    navigate('/loader');
   };
 
   return (

@@ -8,7 +8,6 @@ const Avatar = ({ name, onSignOut }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isDropdownOpen && !event.target.closest('.avatar-container')) {
@@ -53,6 +52,7 @@ const Avatar = ({ name, onSignOut }) => {
 
 const Header = () => {
   const [userName, setUserName] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -62,19 +62,12 @@ const Header = () => {
       setUserName(storedName);
     }
   }, []);
-  const navigate = useNavigate();
-
 
   const handleSignOut = () => {
-    // Clear authentication data
     localStorage.removeItem("authToken");
     localStorage.removeItem("userName");
-  
-    // Reset user state
     setUserName(null);
     navigate("/");
-    // Optionally redirect to login page
-    // window.location.href = "/login";
   };
 
   return (
@@ -88,24 +81,27 @@ const Header = () => {
 
           {/* Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            
-                <ul className="flex items-center gap-6">
-                  <li>
-                    <a 
-                      href="/contact" 
-                      className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
-                    >
-                      Contact Us
-                    </a>
-                  </li>
-                  <li>
-                    <a 
-                      href="./about" 
-                      className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
-                    >
-                      About Us
-                    </a>
-                  </li>
+            <ul className="flex items-center gap-6">
+              <li>
+                <a 
+                  href="/contact" 
+                  className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
+                >
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="/about" 
+                  className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
+                >
+                  About Us
+                </a>
+              </li>
+
+              {/* Show only when user is not logged in */}
+              {!userName && (
+                <>
                   <li>
                     <a 
                       href="/signup" 
@@ -116,22 +112,22 @@ const Header = () => {
                   </li>
                   <li>
                     <a 
-                      href="./Signin" 
+                      href="/signin" 
                       className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
                     >
-                      SignIn 
+                      SignIn
                     </a>
                   </li>
-                </ul>
-              
+                </>
+              )}
+            </ul>
           </div>
 
-
-          {/* Right Side: Avatar (only if logged in) */}
+          {/* Right Side: Avatar or Mobile Menu */}
           <div className="flex items-center gap-4">
             {userName && <Avatar name={userName} onSignOut={handleSignOut} />}
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button (optional - can add toggle later) */}
             <button className="md:hidden p-2 rounded-lg hover:bg-white/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
