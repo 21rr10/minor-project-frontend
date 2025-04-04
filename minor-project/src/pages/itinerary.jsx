@@ -30,47 +30,40 @@ function createResource(promise) {
   };
 }
 
-// Mock fetch function
+// Fetch function for itinerary data
 const fetchItineraryData = (destination, mood) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Mock data that would come from your backend
-      const mockResponse = `Bhubaneswar
-                            Lingaraj Temple
-                            Mukteshwar Temple
-                            Rajarani Temple
-                            Parasurameswara Temple
-                            ISKCON Temple
-                            Brahmeswara Temple
-                            Ananta Vasudeva Temple
-                            Bindu Sarovara
-                            Dhauli Shanti Stupa
-                            Odisha State Museum`;
-      
-      // Parse the data (split by newlines)
-      const lines = mockResponse.split('\n');
-      const cityName = lines[0].trim();
-      const attractions = lines.slice(1).map(line => line.trim()).filter(line => line);
-      
-      // Create structured data
-      const parsedData = {
-        cityName,
-        attractions: attractions.map((name, index) => ({
-          id: index + 1,
-          name,
-          description: `One of the most significant spiritual destinations in ${cityName}. A must-visit for anyone seeking spiritual enlightenment.`,
-          rating: (4 + Math.random()).toFixed(1),
-          visitDuration: Math.floor(Math.random() * 3) + 1, // 1-3 hours
-          highlights: [
-            'Ancient architecture',
-            'Peaceful surroundings',
-            'Religious significance'
-          ]
-        }))
-      };
-      
-      resolve(parsedData);
-    }, 1000);
+  return fetch('/api/v1/itinerary', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ location: destination, mood })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to fetch itinerary data');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Transform API response to the format needed by the component
+    const attractions = data.itinerary.itinerary.map((name, index) => ({
+      id: index + 1,
+      name,
+      description: `One of the most significant attractions in ${data.itinerary.location}. A must-visit for anyone exploring the city.`,
+      rating: (4 + Math.random()).toFixed(1),
+      visitDuration: Math.floor(Math.random() * 3) + 1, // 1-3 hours
+      highlights: [
+        'Popular attraction',
+        'Cultural significance',
+        'Scenic beauty'
+      ]
+    }));
+    
+    return {
+      cityName: data.itinerary.location,
+      attractions
+    };
   });
 };
 
@@ -150,8 +143,8 @@ const ItineraryContent = ({ resource }) => {
           <div className="p-6 sm:p-10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900">Your Spiritual Journey</h2>
-                <p className="text-gray-600 mt-2">Explore these carefully selected destinations for a soulful experience</p>
+                <h2 className="text-3xl font-bold text-gray-900">Your {itineraryData.cityName} Journey</h2>
+                <p className="text-gray-600 mt-2">Explore these carefully selected destinations for an amazing experience</p>
               </div>
               <div className="mt-4 sm:mt-0 flex items-center bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium">
                 <MapPin className="w-4 h-4 mr-1" />
@@ -198,6 +191,7 @@ const ItineraryContent = ({ resource }) => {
         <div className="text-center">
           <button 
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-md hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 text-lg"
+            onClick={() => window.location.href = '/travel-details'}
           >
             Let's Explore
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -213,16 +207,15 @@ const ItineraryContent = ({ resource }) => {
 
 // Main Itinerary page component
 const ItineraryPage = () => {
-  // In a real app, you would get these from URL params or route state
-  const destination = 'Bhubaneswar';
-  const mood = 'spiritual';
+  // Get destination and mood from localStorage
+  const destination = localStorage.getItem("location") || "Chandigarh";
+  const mood = localStorage.getItem("mood") || "adventure";
   
-  // Create the data resource - this happens on component mount
-  // In a real app, you might want to extract this to a custom hook
+  // Create the data resource
   const itineraryResource = createResource(fetchItineraryData(destination, mood));
   
   return (
-    <ErrorBoundary >
+    <ErrorBoundary>
       <Suspense fallback={<LoadingFallback />}>
         <ItineraryContent resource={itineraryResource} />
       </Suspense>
