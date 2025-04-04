@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Loader = () => {
   const [loadingText, setLoadingText] = useState('');
   const [dots, setDots] = useState('');
   const [currentType, setCurrentType] = useState('general');
-  
+  const navigate = useNavigate();
+
   const messages = {
     flight: [
       "Searching for the perfect flights ✈️",
@@ -39,12 +41,12 @@ const Loader = () => {
   useEffect(() => {
     const types = ['general', 'flight', 'hotel', 'weather'];
     let typeIndex = 0;
-    
+
     const typeInterval = setInterval(() => {
       typeIndex = (typeIndex + 1) % types.length;
       setCurrentType(types[typeIndex]);
-    }, 6000); // Change type every 6 seconds
-    
+    }, 6000);
+
     return () => clearInterval(typeInterval);
   }, []);
 
@@ -52,24 +54,33 @@ const Loader = () => {
   useEffect(() => {
     const messageArray = messages[currentType];
     let messageIndex = 0;
-    
+
     const messageInterval = setInterval(() => {
       setLoadingText(messageArray[messageIndex]);
       messageIndex = (messageIndex + 1) % messageArray.length;
     }, 3000);
-    
+
     return () => clearInterval(messageInterval);
   }, [currentType]);
-  
-  // Animate the dots
+
+  // Animate dots
   useEffect(() => {
     const dotsInterval = setInterval(() => {
       setDots(prev => prev.length < 3 ? prev + '.' : '');
     }, 500);
-    
+
     return () => clearInterval(dotsInterval);
   }, []);
-  
+
+  // Auto navigation after delay
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      navigate('/itinerary');
+    }, 7000);
+
+    return () => clearTimeout(timeout);
+  }, [navigate]);
+
   const themeConfig = {
     flight: {
       bgGradient: 'from-blue-50 to-blue-100',
@@ -96,29 +107,26 @@ const Loader = () => {
       icon: '🌍',
     }
   };
-  
+
   const theme = themeConfig[currentType];
-  
+
   return (
     <div className={`fixed inset-0 flex items-center justify-center bg-gradient-to-br ${theme.bgGradient} z-50 transition-colors duration-1000`}>
       <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 flex flex-col items-center transform transition-all duration-500">
         {/* Animated icon */}
         <div className="relative mb-8">
-          {/* Spinning circle */}
           <div className={`w-32 h-32 rounded-full ${theme.primary} opacity-20 animate-spin`}></div>
-          
-          {/* Icon */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-5xl animate-bounce">{theme.icon}</span>
           </div>
         </div>
-        
-        {/* Dynamic loading message */}
+
+        {/* Loading text */}
         <div className={`${theme.textColor} text-xl font-medium text-center mb-8 min-h-[2rem] transition-colors duration-500`}>
           {loadingText}<span className="inline-block w-8 text-left">{dots}</span>
         </div>
-        
-        {/* Bouncing dots animation */}
+
+        {/* Bouncing dots */}
         <div className="flex justify-center space-x-3 mb-6">
           {[0, 1, 2].map((i) => (
             <div 
@@ -131,7 +139,7 @@ const Loader = () => {
             ></div>
           ))}
         </div>
-        
+
         {/* Progress bar */}
         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4">
           <div 
@@ -142,22 +150,17 @@ const Loader = () => {
           ></div>
         </div>
       </div>
-      
-      {/* CSS for animations */}
+
+      {/* Animations */}
       <style jsx>{`
         @keyframes bounce {
           0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
           40% { transform: scale(1); opacity: 1; }
         }
-        
+
         @keyframes progressWidth {
           0%, 100% { width: 10%; }
           50% { width: 90%; }
-        }
-        
-        @keyframes movingDot {
-          0%, 100% { left: 0%; }
-          50% { left: 100%; transform: translateX(-100%) translateY(-50%); }
         }
       `}</style>
     </div>
