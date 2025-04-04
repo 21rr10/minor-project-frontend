@@ -39,7 +39,9 @@ const FlightSearchComponent = () => {
     }
 
    
-    localStorage.setItem("location", destination);
+    const destinationCity = airportData.find(airport => airport.airport_code === destination)?.city || destination;
+    localStorage.setItem("location", destinationCity);
+    
     localStorage.setItem("flightSearchData", JSON.stringify({
       origin,
       destination,

@@ -25,14 +25,14 @@ const TravelDetailsPage = () => {
       try {
         // Get location and mood from localStorage
         const location = localStorage.getItem("location");
-        const mood = localStorage.getItem("mood");
+      //  const mood = localStorage.getItem("mood");
         
         const response = await fetch(`${url}/system/weather-bot`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ location, mood })
+          body: JSON.stringify({ location })
         });
         
         const data = await response.json();
@@ -225,11 +225,7 @@ const TravelDetailsPage = () => {
                         </div>
                       </div>
                     ))}
-                    {weatherData.summary && (
-                      <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-700">
-                        <p>{weatherData.summary}</p>
-                      </div>
-                    )}
+                  
                   </div>
                 ) : (
                   <div className="text-center py-8 text-gray-500">
