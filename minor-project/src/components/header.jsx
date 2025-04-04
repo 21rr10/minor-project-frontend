@@ -92,7 +92,7 @@ const Header = () => {
                 <ul className="flex items-center gap-6">
                   <li>
                     <a 
-                      href="/contactUs" 
+                      href="/contact" 
                       className="text-white/90 hover:text-[#00e5ff] font-medium text-sm transition-colors"
                     >
                       Contact Us
