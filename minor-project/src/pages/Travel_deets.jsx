@@ -72,10 +72,8 @@ const TravelDetailsPage = () => {
         });
         
         const data = await response.json();
-        // Parse the JSON string from the structured.candidates[0].content.parts[0].text
-        const flightText = data.structured.candidates[0].content.parts[0].text;
-        const flightJson = JSON.parse(flightText.replace(/``````/g, ''));
-        setFlightData(flightJson);
+        // Updated to match the actual API response structure
+        setFlightData(data.flights);
         setLoading(prev => ({ ...prev, flights: false }));
       } catch (err) {
         console.error('Error fetching flight data:', err);
@@ -101,10 +99,8 @@ const TravelDetailsPage = () => {
         });
         
         const data = await response.json();
-        // Parse the JSON string from the hotels.candidates[0].content.parts[0].text
-        const hotelText = data.hotels.candidates[0].content.parts[0].text;
-        const hotelJson = JSON.parse(hotelText.replace(/``````/g, ''));
-        setHotelData(hotelJson);
+        // Updated to match the actual API response structure
+        setHotelData(data.hotels);
         setLoading(prev => ({ ...prev, hotels: false }));
       } catch (err) {
         console.error('Error fetching hotel data:', err);
@@ -141,7 +137,7 @@ const TravelDetailsPage = () => {
       year: 'numeric'
     });
   };
-
+  
   // Format time for display
   const formatTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
@@ -166,7 +162,7 @@ const TravelDetailsPage = () => {
       {/* Header */}
       <div className="bg-indigo-900 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Your Trip to {destination}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Your Trip to {weatherData ? weatherData.city : destination}</h1>
           <div className="flex flex-wrap items-center text-indigo-100">
             <div className="flex items-center mr-6 mb-2">
               <Calendar className="h-5 w-5 mr-2" />
