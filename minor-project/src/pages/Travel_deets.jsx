@@ -3,12 +3,6 @@ import { Calendar, Cloud, CloudRain, CloudSnow, Sun, Thermometer, Umbrella, Wind
 import Header from '../components/header';
 
 const TravelDetailsPage = () => {
-  // In a real app, you would get these from URL params or route state
-  const destination = 'Bhubaneswar';
-  const checkInDate = new Date('2025-04-01');
-  const checkOutDate = new Date('2025-04-15');
-  const origin = 'Delhi';
-  
   // State for the data
   const [weatherData, setWeatherData] = useState(null);
   const [flightData, setFlightData] = useState(null);
@@ -19,44 +13,31 @@ const TravelDetailsPage = () => {
     hotels: true
   });
   
-  // Mock function to fetch data from the backend
+  // Helper function to convert ISO date string to YYYY-MM-DD format
+  const formatDateToYYYYMMDD = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+  };
+  
+  // Fetch data from the backend
   useEffect(() => {
-    // Simulate API calls
     const fetchWeather = async () => {
       try {
-        // In a real app, this would be an actual API call
-        // await fetch(`/api/weather?destination=${destination}&startDate=${checkInDate}&endDate=${checkOutDate}`)
+        // Get location and mood from localStorage
+        const location = localStorage.getItem("location");
+        const mood = localStorage.getItem("mood");
         
-        // For demo purposes, using setTimeout to simulate network request
-        setTimeout(() => {
-          // Mock data that would come from your backend
-          const mockData = {
-            city: destination,
-            forecast: Array.from({ length: 7 }, (_, i) => {
-              const date = new Date(checkInDate);
-              date.setDate(date.getDate() + i);
-              
-              // Generate random weather data
-              const weatherTypes = ['sunny', 'cloudy', 'rainy', 'stormy', 'partly-cloudy'];
-              const weatherType = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
-              
-              return {
-                date: date.toISOString().split('T')[0],
-                dayOfWeek: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
-                maxTemp: Math.floor(Math.random() * 15) + 25, // 25-40°C
-                minTemp: Math.floor(Math.random() * 10) + 15, // 15-25°C
-                weatherType,
-                precipitation: Math.floor(Math.random() * 80), // 0-80%
-                humidity: Math.floor(Math.random() * 30) + 50, // 50-80%
-                windSpeed: Math.floor(Math.random() * 20) + 5, // 5-25 km/h
-              };
-            })
-          };
-          
-          setWeatherData(mockData);
-          setLoading(prev => ({ ...prev, weather: false }));
-        }, 800);
+        const response = await fetch('/api/v1/weather', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ location, mood })
+        });
         
+        const data = await response.json();
+        setWeatherData(data);
+        setLoading(prev => ({ ...prev, weather: false }));
       } catch (err) {
         console.error('Error fetching weather data:', err);
         setLoading(prev => ({ ...prev, weather: false }));
@@ -65,40 +46,37 @@ const TravelDetailsPage = () => {
     
     const fetchFlights = async () => {
       try {
-        // In a real app, this would be an actual API call
-        // await fetch(`/api/flights?origin=${origin}&destination=${destination}&date=${checkInDate}`)
+        // Get flight search data from localStorage
+        const flightSearchDataStr = localStorage.getItem("flightSearchData");
+        const flightSearchData = flightSearchDataStr ? JSON.parse(flightSearchDataStr) : null;
         
-        setTimeout(() => {
-          // Mock flight data
-          const airlines = ['IndiGo', 'Air India', 'SpiceJet', 'Vistara', 'Go First', 'AirAsia India'];
-          const mockData = Array.from({ length: 8 }, (_, i) => {
-            const departureHour = 6 + Math.floor(Math.random() * 14); // 6 AM to 8 PM
-            const durationHours = 1 + Math.floor(Math.random() * 3);
-            const durationMinutes = Math.floor(Math.random() * 60);
-            
-            const departureTime = `${departureHour.toString().padStart(2, '0')}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`;
-            const arrivalTime = `${(departureHour + durationHours).toString().padStart(2, '0')}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`;
-            
-            return {
-              id: i + 1,
-              airline: airlines[Math.floor(Math.random() * airlines.length)],
-              flightNumber: `${['AI', 'SG', 'UK', '6E', 'G8', 'I5'][Math.floor(Math.random() * 6)]}${100 + Math.floor(Math.random() * 900)}`,
-              departureTime,
-              arrivalTime,
-              duration: `${durationHours}h ${durationMinutes}m`,
-              price: 3000 + Math.floor(Math.random() * 8000), // ₹3000-₹11000
-              stops: Math.floor(Math.random() * 2), // 0 or 1 stops
-              platform: ['MakeMyTrip', 'EaseMyTrip', 'Goibibo', 'Cleartrip', 'Yatra'][Math.floor(Math.random() * 5)]
-            };
-          });
-          
-          // Sort by price
-          mockData.sort((a, b) => a.price - b.price);
-          
-          setFlightData(mockData);
-          setLoading(prev => ({ ...prev, flights: false }));
-        }, 1200);
+        if (!flightSearchData) {
+          throw new Error("Flight search data not found in localStorage");
+        }
         
+        const { origin, destination, checkInDate } = flightSearchData;
+        
+        // Format the date to YYYY-MM-DD
+        const formattedDepartureDate = formatDateToYYYYMMDD(checkInDate);
+        
+        const response = await fetch('/api/v1/flight', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            origin, 
+            destination, 
+            departureDate: formattedDepartureDate 
+          })
+        });
+        
+        const data = await response.json();
+        // Parse the JSON string from the structured.candidates[0].content.parts[0].text
+        const flightText = data.structured.candidates[0].content.parts[0].text;
+        const flightJson = JSON.parse(flightText.replace(/``````/g, ''));
+        setFlightData(flightJson);
+        setLoading(prev => ({ ...prev, flights: false }));
       } catch (err) {
         console.error('Error fetching flight data:', err);
         setLoading(prev => ({ ...prev, flights: false }));
@@ -107,39 +85,27 @@ const TravelDetailsPage = () => {
     
     const fetchHotels = async () => {
       try {
-        // In a real app, this would be an actual API call
-        // await fetch(`/api/hotels?destination=${destination}&checkIn=${checkInDate}&checkOut=${checkOutDate}`)
+        // Get location from localStorage
+        const location = localStorage.getItem("location");
         
-        setTimeout(() => {
-          // Mock hotel data
-          const hotelNames = [
-            'The Grand Heritage', 'City Comfort Inn', 'Hotel Swosti Premium', 
-            'Mayfair Lagoon', 'Trident Bhubaneswar', 'Ginger Hotel',
-            'Hotel Hindusthan International', 'Sandys Tower', 'Empires Hotel'
-          ];
-          
-          const mockData = Array.from({ length: 6 }, (_, i) => {
-            return {
-              id: i + 1,
-              name: hotelNames[i],
-              rating: (3 + Math.random() * 2).toFixed(1), // 3-5 stars
-              price: 2000 + Math.floor(Math.random() * 8000), // ₹2000-₹10000 per night
-              location: `${['Central', 'North', 'South', 'East', 'West'][Math.floor(Math.random() * 5)]} Bhubaneswar`,
-              amenities: ['WiFi', 'Swimming Pool', 'Restaurant', 'Spa', 'Gym', 'Room Service', 'Airport Shuttle']
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 3 + Math.floor(Math.random() * 4)),
-              image: `/api/placeholder/300/200`,
-              platform: ['MakeMyTrip', 'Booking.com', 'Agoda', 'Goibibo', 'Hotels.com'][Math.floor(Math.random() * 5)]
-            };
-          });
-          
-          // Sort by price
-          mockData.sort((a, b) => a.price - b.price);
-          
-          setHotelData(mockData);
-          setLoading(prev => ({ ...prev, hotels: false }));
-        }, 1500);
+        if (!location) {
+          throw new Error("Location not found in localStorage");
+        }
         
+        const response = await fetch('/api/v1/hotel', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ location })
+        });
+        
+        const data = await response.json();
+        // Parse the JSON string from the hotels.candidates[0].content.parts[0].text
+        const hotelText = data.hotels.candidates[0].content.parts[0].text;
+        const hotelJson = JSON.parse(hotelText.replace(/``````/g, ''));
+        setHotelData(hotelJson);
+        setLoading(prev => ({ ...prev, hotels: false }));
       } catch (err) {
         console.error('Error fetching hotel data:', err);
         setLoading(prev => ({ ...prev, hotels: false }));
@@ -153,19 +119,17 @@ const TravelDetailsPage = () => {
   
   // Helper function to get weather icon
   const getWeatherIcon = (type) => {
-    switch (type) {
-      case 'sunny':
-        return <Sun className="h-8 w-8 text-yellow-500" />;
-      case 'cloudy':
-        return <Cloud className="h-8 w-8 text-gray-500" />;
-      case 'rainy':
-        return <CloudRain className="h-8 w-8 text-blue-500" />;
-      case 'stormy':
-        return <Umbrella className="h-8 w-8 text-purple-500" />;
-      case 'partly-cloudy':
-        return <Cloud className="h-8 w-8 text-gray-400" />;
-      default:
-        return <Sun className="h-8 w-8 text-yellow-500" />;
+    const lowerType = type.toLowerCase();
+    if (lowerType.includes('sunny')) {
+      return <Sun className="h-8 w-8 text-yellow-500" />;
+    } else if (lowerType.includes('cloudy') || lowerType.includes('partly cloudy')) {
+      return <Cloud className="h-8 w-8 text-gray-400" />;
+    } else if (lowerType.includes('rain')) {
+      return <CloudRain className="h-8 w-8 text-blue-500" />;
+    } else if (lowerType.includes('snow')) {
+      return <CloudSnow className="h-8 w-8 text-blue-200" />;
+    } else {
+      return <Sun className="h-8 w-8 text-yellow-500" />;
     }
   };
   
@@ -177,6 +141,24 @@ const TravelDetailsPage = () => {
       year: 'numeric'
     });
   };
+
+  // Format time for display
+  const formatTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+  
+  // Get destination and origin from localStorage
+  const destination = localStorage.getItem("location") || "Unknown Destination";
+  const flightSearchDataStr = localStorage.getItem("flightSearchData");
+  const flightSearchData = flightSearchDataStr ? JSON.parse(flightSearchDataStr) : null;
+  const origin = flightSearchData ? flightSearchData.origin : "Unknown Origin";
+  const checkInDate = flightSearchData ? new Date(flightSearchData.checkInDate) : new Date();
+  const checkOutDate = flightSearchData ? new Date(flightSearchData.checkOutDate) : new Date();
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -247,6 +229,11 @@ const TravelDetailsPage = () => {
                         </div>
                       </div>
                     ))}
+                    {weatherData.summary && (
+                      <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-700">
+                        <p>{weatherData.summary}</p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="text-center py-8 text-gray-500">
@@ -278,46 +265,34 @@ const TravelDetailsPage = () => {
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Airline</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departure</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Arrival</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stops</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aircraft</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {flightData.map((flight) => (
-                          <tr key={flight.id} className="hover:bg-gray-50">
+                        {flightData.map((flight, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
                                 <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
-                                  {flight.airline.substring(0, 2)}
+                                  {flight.airlineName.substring(0, 2)}
                                 </div>
                                 <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">{flight.airline}</div>
-                                  <div className="text-sm text-gray-500">{flight.flightNumber}</div>
+                                  <div className="text-sm font-medium text-gray-900">{flight.airlineName}</div>
                                 </div>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {flight.departureTime}
+                              {formatTime(flight.departureTime)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {flight.arrivalTime}
+                              {formatTime(flight.arrivalTime)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {flight.duration}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {flight.stops === 0 ? 'Direct' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}
+                              {flight.planeType}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">₹{flight.price.toLocaleString()}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <span className="text-sm text-gray-900">{flight.platform}</span>
-                                <ExternalLink className="h-4 w-4 ml-1 text-indigo-500" />
-                              </div>
+                              <div className="text-sm font-medium text-gray-900">₹{parseFloat(flight.totalPrice).toLocaleString()}</div>
                             </td>
                           </tr>
                         ))}
@@ -332,7 +307,7 @@ const TravelDetailsPage = () => {
               </div>
             </div>
             
-            {/* Hotel Prices */}
+            {/* Hotel Options */}
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
@@ -346,19 +321,16 @@ const TravelDetailsPage = () => {
                   </div>
                 ) : hotelData ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {hotelData.map((hotel) => (
-                      <div key={hotel.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                    {hotelData.map((hotel, index) => (
+                      <div key={index} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                         <div className="p-4">
-                          <h3 className="font-bold text-lg mb-1">{hotel.name}</h3>
-                          <p className="text-gray-600 text-sm mb-2">{hotel.location}</p>
-                           
+                          <h3 className="font-bold text-lg mb-1">{hotel.hotel_name}</h3>
+                          <p className="text-gray-600 text-sm mb-2">{hotel.address}</p>
+                          <p className="text-gray-500 text-xs">{hotel.city_country}</p>
+                          
                           <div className="flex justify-between items-center mt-4">
-                            <div>
-                              <div className="text-gray-900 font-bold">₹{hotel.price.toLocaleString()}</div>
-                              <div className="text-gray-500 text-xs">per night</div>
-                            </div>
                             <div className="flex items-center text-indigo-600 text-sm">
-                              <span>{hotel.platform}</span>
+                              <span>View Details</span>
                               <ExternalLink className="h-4 w-4 ml-1" />
                             </div>
                           </div>
